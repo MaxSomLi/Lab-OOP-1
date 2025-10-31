@@ -13,21 +13,26 @@ public class Car {
     double price;
     int idx;
 
-    public Car(String name, String type, double speed, double price, boolean nCar) throws IOException, SQLException {
+    public Car(int idx, String name, String type, double speed, double price) throws IOException, SQLException {
+        this.idx = idx;
         this.name = name;
         this.type = type;
         this.speed = speed;
         this.price = price;
-        if (nCar) {
+        if (idx == -1) {
             try {
                 Connection c = DriverManager.getConnection(url, user, pass);
-                String sql = "INSERT INTO Park.Car(Name, Type, Speed, Price) VALUES(?, ?, ?, ?);";
-                PreparedStatement pstmt = c.prepareStatement(sql);
+                String sql = "INSERT INTO Park.Car(Name, Type, Speed, Price) VALUES(?, ?, ?, ?);", sel = "SELECT * FROM Park.Car;";
+                PreparedStatement pstmt = c.prepareStatement(sql), rr = c.prepareStatement(sel);
                 pstmt.setString(1, name);
                 pstmt.setString(2, type);
                 pstmt.setDouble(3, speed);
                 pstmt.setDouble(4, price);
                 pstmt.executeUpdate();
+                ResultSet rs = rr.executeQuery();
+                while (rs.next()) {
+                    this.idx = rs.getInt("Idx");
+                }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -56,9 +61,5 @@ public class Car {
 
     public void print() {
         System.out.println(name + "--" + type + "--" + speed + "MPH--" + price);
-    }
-
-    public void setIdx(int idx) {
-        this.idx = idx;
     }
 }

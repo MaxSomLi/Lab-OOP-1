@@ -28,8 +28,8 @@ public class Park {
                 String type = rs.getString("Type");
                 double speed = rs.getDouble("Speed");
                 double price = rs.getDouble("Price");
-                Car nc = new Car(name, type, speed, price, false);
-                nc.setIdx(rs.getInt("Idx"));
+                int idx = rs.getInt("Idx");
+                Car nc = new Car(idx, name, type, speed, price);
                 cars.add(nc);
             }
             while (grs.next()) {
@@ -38,9 +38,8 @@ public class Park {
                 cars.stream().filter(o -> o.getIdx() == idx).findFirst().ifPresent(car -> {
                     GasCar g;
                     try {
-                        g = new GasCar(car.getName(), car.getType(), petrol, car.getSpeed(), car.getPrice(), false);
+                        g = new GasCar(idx, car.getName(), car.getType(), petrol, car.getSpeed(), car.getPrice());
                         gc.add(g);
-                        g.setIdx(idx);
                     } catch (IOException | SQLException e) {
                         throw new RuntimeException(e);
                     }

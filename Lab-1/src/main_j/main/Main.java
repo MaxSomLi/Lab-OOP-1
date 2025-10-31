@@ -39,9 +39,10 @@ public class Main {
             System.out.println("Вартість:");
             double price = scanner.nextDouble();
             if (type.equals("Electric") || petrol > 0) {
-                park.addCar(new Car(name, type, speed, price, type.equals("Electric")));
                 if (type.equals("Gas")) {
-                    park.addGasCar(new GasCar(name, type, petrol, speed, price, true));
+                    park.addGasCar(new GasCar(-1, name, type, petrol, speed, price));
+                } else {
+                    park.addCar(new Car(-1, name, type, speed, price));
                 }
             }
         } else if (choice == 2) {
